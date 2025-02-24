@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id" dir="ltr" data-bs-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tugas Kelas 11</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+      /* ========== CUSTOM CSS ========== */
+      body {
+        background: #1b2326;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        color: white;
+      }
+
+      .card-container {
+        perspective: 1000px;
+      }
+
+      .kartu {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        transform-style: preserve-3d;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        height: 400px;
+      }
+
+      .efek-cahaya {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .kartu:hover {
+        transform: translateZ(20px);
+        box-shadow: 0 25px 40px rgba(0, 0, 0, 0.4);
+      }
+
+      .gambar-kartu {
+        height: 250px;
+        object-fit: cover;
+        transition: transform 0.3s;
+      }
+
+      .kartu:hover .gambar-kartu {
+        transform: scale(1.05);
+      }
+
+      .badan-kartu {
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        position: relative;
+        z-index: 2;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ========== BAGIAN HTML ========== -->
+    <section class="py-5">
+      <div class="container">
+        <h2 class="text-center mb-5">Tugas Kelas 11 Semester 1</h2>
+
+        <div class="row g-4">
+          <!-- Kartu 1 -->
+          <div class="col-md-4">
+            <div class="kartu">
+              <div class="efek-cahaya"></div>
+              <img src="https://via.placeholder.com/300x250" class="gambar-kartu card-img-top" alt="Mata Pelajaran" />
+              <div class="badan-kartu card-body text-center">
+                <h5 class="card-title">Bahasa Indonesia</h5>
+                <p class="text-muted">Tugas dan Materi</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kartu 2 -->
+          <div class="col-md-4">
+            <div class="kartu">
+              <div class="efek-cahaya"></div>
+              <img src="https://via.placeholder.com/300x250" class="gambar-kartu card-img-top" alt="Mata Pelajaran" />
+              <div class="badan-kartu card-body text-center">
+                <h5 class="card-title">Sejarah</h5>
+                <p class="text-muted">Tugas dan Materi</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kartu 3 -->
+          <div class="col-md-4">
+            <div class="kartu">
+              <div class="efek-cahaya"></div>
+              <img src="https://via.placeholder.com/300x250" class="gambar-kartu card-img-top" alt="Mata Pelajaran" />
+              <div class="badan-kartu card-body text-center">
+                <h5 class="card-title">Fisika</h5>
+                <p class="text-muted">Tugas dan Materi</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const semuaKartu = document.querySelectorAll(".kartu");
+
+        const gerakkanKartu = (e, kartu) => {
+          const rect = kartu.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          // Rotasi 3D
+          const rotateY = (x - centerX) / 25;
+          const rotateX = (centerY - y) / 25;
+
+          // Efek paralaks
+          const parallaxX = (x - centerX) / 20;
+          const parallaxY = (y - centerY) / 20;
+
+          // Efek cahaya
+          const cahaya = kartu.querySelector(".efek-cahaya");
+          cahaya.style.left = `${x}px`;
+          cahaya.style.top = `${y}px`;
+          cahaya.style.opacity = "1";
+
+          // Terapkan transformasi
+          kartu.style.transform = `
+                rotateX(${rotateX}deg)
+                rotateY(${rotateY}deg)
+                translate(${parallaxX}px, ${parallaxY}px)
+            `;
+        };
+
+        const resetKartu = (kartu) => {
+          kartu.style.transform = "none";
+          kartu.querySelector(".efek-cahaya").style.opacity = "0";
+        };
+
+        semuaKartu.forEach((kartu) => {
+          kartu.addEventListener("mousemove", (e) => gerakkanKartu(e, kartu));
+          kartu.addEventListener("mouseleave", () => resetKartu(kartu));
+        });
+      });
+    </script>
+  </body>
+</html>
